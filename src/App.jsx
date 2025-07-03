@@ -1,7 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-// The ethers library is expected to be globally available via a CDN script.
-// test
-// Define the chains, RPC URLs, and explorers as provided
 const CHAINS = [
   {
     name: "Ethereum Sepolia",
@@ -9,7 +6,7 @@ const CHAINS = [
     domain: 11155111,
     mailbox: "0xcc737a94fecaec165abcf12ded095bb13f037685",
     receiver: "0x000000000000000000000000000000000000dead",
-    igp: "0xe9e1cf1442e37bebf6ce102a7cb22bd556a9321f",
+    igp: "0xe9e1cf1442e37bebf6ce102a7cb22bd556a9321f", // TODO: fill with real address
   },
   {
     name: "Arbitrum Sepolia",
@@ -17,13 +14,13 @@ const CHAINS = [
     domain: 421614,
     mailbox: "0x598face78a4302f11e3de0bee1894da0b2cb71f8",
     receiver: "0x000000000000000000000000000000000000dead",
-    igp: "0x53c52406d23c092e330a529d590ec96eace6cf5b",
+    igp: "0x53c52406d23c092e330a529d590ec96eace6cf5b", // TODO: fill with real address
   },
   {
     name: "Base Sepolia",
     id: 84532,
     domain: 84532,
-    mailbox: "0x6966b0E55883d49BFB24539356a2f8A673E02039", // TODO: fill with real address
+    mailbox: "0x6966b0E55883d49BFB24539356a2f8A673E02039", 
     receiver: "0x000000000000000000000000000000000000dead",
     igp: "0x0000000000000000000000000000000000000000", // TODO: fill with real address
   },
@@ -58,25 +55,21 @@ function App() {
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState("");
 
-  const chatHistoryRef = useRef(null); // Ref for scrolling to the latest message
+  const chatHistoryRef = useRef(null); 
 
-  // Function to show a custom modal alert
   const showMessageModal = (content) => {
     setModalContent(content);
     setShowModal(true);
   };
 
-  // Function to close the custom modal alert
   const closeModal = () => {
     setShowModal(false);
     setModalContent("");
   };
 
-  // Connect wallet function
   const connectWallet = async () => {
     if (window.ethereum) {
       try {
-        // Ensure ethers is loaded before using it
         if (!window.ethers) {
           showMessageModal(
             "Ethers.js library not found. Please ensure it's loaded correctly."
@@ -106,7 +99,6 @@ function App() {
     }
   };
 
-  // Helper function to generate a random hex string for simulated hashes
   const generateRandomHex = (length) => {
     let result = "0x";
     const characters = "abcdef0123456789";
@@ -118,13 +110,7 @@ function App() {
     return result;
   };
 
-  // Send message function
   const sendMessage = async () => {
-    // if (!walletAddress) {
-    //   setStatus("Please connect your wallet to send a message.");
-    //   showMessageModal("Please connect your wallet to send a message.");
-    //   return;
-    // }
     setStatus("Sending message...");
     setSrcTxHash("");
     setDstTxHash("");
@@ -142,7 +128,6 @@ function App() {
         throw new Error("Source and Destination chains cannot be the same.");
       }
 
-      // --- Simulation Mode if no wallet is connected ---
       if (!walletAddress) {
         showMessageModal(
           "Simulation mode: No wallet connected. The transaction hashes and message ID shown below are random and will NOT be found on Sepolia or any real network."
@@ -152,13 +137,13 @@ function App() {
         const simulatedMessageId = generateRandomHex(64);
         const simulatedDstTxHash = generateRandomHex(64);
         const simulatedRecipientAddress =
-          "0x" + generateRandomHex(40).substring(2); // Mock address
+          "0x" + generateRandomHex(40).substring(2);
 
         setSrcTxHash(simulatedSrcTxHash);
         setMessageId(simulatedMessageId);
         setStatus("Simulated message sent! Waiting for simulated delivery...");
 
-        await new Promise((resolve) => setTimeout(resolve, 3000)); // Simulate network delay
+        await new Promise((resolve) => setTimeout(resolve, 3000)); 
 
         setDstTxHash(simulatedDstTxHash);
         setReceivedMsg(message);
@@ -179,18 +164,14 @@ function App() {
           },
           ...prev,
         ]);
-        return; // Exit function after simulation
+        return; 
       }
-      // --- End Simulation Mode ---
-
-      // Ensure ethers is loaded before using it (for actual wallet interaction)
       if (!window.ethers) {
         throw new Error(
           "Ethers.js library not found. Please ensure it's loaded correctly."
         );
       }
 
-      // Validate wallet address before proceeding
       if (!window.ethers.utils.isAddress(walletAddress)) {
         throw new Error(
           "Invalid or missing wallet address. Please connect your wallet."
@@ -199,7 +180,6 @@ function App() {
       const checksummedWalletAddress =
         window.ethers.utils.getAddress(walletAddress);
 
-      // Check if MetaMask is on the correct source chain
       const currentChainId = Number(window.ethereum.networkVersion);
       if (currentChainId !== sourceChain) {
         setStatus(`Please switch to ${srcChainObj.name} in MetaMask.`);
@@ -208,11 +188,9 @@ function App() {
             method: "wallet_switchEthereumChain",
             params: [{ chainId: "0x" + sourceChain.toString(16) }],
           });
-          // After switching, give some time for the provider to update
           await new Promise((resolve) => setTimeout(resolve, 1000));
         } catch (switchError) {
           if (switchError.code === 4902) {
-            // Chain not added
             showMessageModal(
               `Please add ${srcChainObj.name} to your MetaMask wallet.`
             );
@@ -220,7 +198,7 @@ function App() {
             showMessageModal(`Failed to switch chain: ${switchError.message}`);
           }
           setStatus(`Failed to switch to ${srcChainObj.name}.`);
-          return; // Stop execution if chain switch fails
+          return; 
         }
       }
 
@@ -229,12 +207,6 @@ function App() {
       );
       const signer = provider.getSigner();
 
-      const igpAbi = [
-        "function quoteGasPayment(uint32 destination,uint256 gas) view returns (uint256)",
-        "function payForGas(bytes32 messageId,uint32 destination,uint256 gas,address refund) payable",
-      ];
-
-      // Mailbox ABI (minimal for dispatch and Process event)
       const mailboxAbi = [
         "function dispatch(uint32 destinationDomain, bytes32 recipientAddress, bytes message) external returns (bytes32)",
         "event Dispatch(bytes32 indexed messageId, uint32 indexed origin, uint32 indexed destination, bytes32 recipient, bytes message, address caller)",
@@ -253,27 +225,6 @@ function App() {
         mailboxAbi,
         signer
       );
-
-      // ------------- PAY INTERCHAIN GAS -------------
-      // const GAS_AMOUNT = 350_000; // upper-bound for a simple receive
-      // const igp = new ethers.Contract(srcChainObj.igp, igpAbi, signer);
-      // console.log("igp =", igp);
-
-      // // // ask how much native ETH to send
-      // const quoted = await igp.quoteGasPayment(destinationDomain, GAS_AMOUNT);
-
-      // // pay it – without this the relayer will ignore the packet
-      // const payTx = await igp.payForGas(
-      //   msgId, // message to execute
-      //   destinationDomain,
-      //   GAS_AMOUNT,
-      //   walletAddress, // refund any surplus to the sender
-      //   { value: quoted } // ← ETH payment
-      // );
-      // await payTx.wait();
-      // ----------------------------------------------
-
-      // Send the message
       const tx = await mailbox.dispatch(
         destinationDomain,
         recipientAddress,
@@ -292,7 +243,6 @@ function App() {
             break;
           }
         } catch (e) {
-          // Ignore logs that are not from the mailbox interface
         }
       }
       if (msgId) setMessageId(msgId);
@@ -300,7 +250,6 @@ function App() {
         "Message confirmed on source chain! Listening for delivery on destination chain..."
       );
 
-      // Poll destination chain for Process event
       const dstProviderUrl = RPC_URLS[destChain];
       if (!dstProviderUrl) {
         throw new Error(
@@ -316,28 +265,24 @@ function App() {
         dstProvider
       );
 
-      // Poll for up to 2 minutes
       let found = false;
-      const pollingAttempts = 24; // 24 attempts * 5 seconds = 120 seconds (2 minutes)
+      const pollingAttempts = 24; 
       for (let i = 0; i < pollingAttempts; i++) {
         setStatus(
           `Waiting for message on destination chain... (${(i + 1) * 5}s)`
         );
-        // Filter by messageId if available, otherwise by origin and destination
         const filter = msgId
           ? dstMailbox.filters.Process(msgId)
           : dstMailbox.filters.Process(null, sourceChain, destinationDomain);
 
-        // Query last 500 blocks to catch recent events
         const events = await dstMailbox.queryFilter(filter, -500);
 
-        // Find event with matching recipient and message in JS
         const event = events.find(
           (e) =>
             e.args &&
-            e.args.recipient.toLowerCase() === recipientAddress.toLowerCase() && // Case-insensitive comparison
+            e.args.recipient.toLowerCase() === recipientAddress.toLowerCase() && 
             window.ethers.utils.toUtf8String(e.args.message) === message &&
-            (msgId ? e.args.messageId === msgId : true) // Ensure messageId matches if known
+            (msgId ? e.args.messageId === msgId : true) 
         );
 
         if (event) {
@@ -347,9 +292,9 @@ function App() {
           found = true;
           setHistory((prev) => [
             {
-              id: event.args.messageId || Date.now().toString(), // Fallback ID if messageId is null
+              id: event.args.messageId || Date.now().toString(),
               text: message,
-              srcTx: tx.hash, // Use the source transaction hash
+              srcTx: tx.hash, 
               dstTx: event.transactionHash,
               messageId: event.args.messageId,
               timestamp: Date.now(),
@@ -362,7 +307,7 @@ function App() {
           ]);
           break;
         }
-        await new Promise((res) => setTimeout(res, 5000)); // Wait 5 seconds before next poll
+        await new Promise((res) => setTimeout(res, 5000)); 
       }
       if (!found) {
         setStatus(
@@ -378,7 +323,6 @@ function App() {
     }
   };
 
-  // Scroll to the latest message when history updates
   useEffect(() => {
     if (chatHistoryRef.current) {
       chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
@@ -394,7 +338,6 @@ function App() {
 
   return (
     <div className="app-wrapper">
-      {/* ─────────── Modal ─────────── */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal">
@@ -404,10 +347,8 @@ function App() {
         </div>
       )}
       <div className="card">
-        {/* ─────────── Title ─────────── */}
         <h1 className="heading">Cross-Chain Messenger</h1>
 
-        {/* ─────────── Wallet button ─────────── */}
         <button onClick={connectWallet} className="connect-btn">
           {walletAddress
             ? `Connected: ${walletAddress.slice(0, 6)}…${walletAddress.slice(
@@ -416,7 +357,6 @@ function App() {
             : "Connect Wallet"}
         </button>
 
-        {/* ─────────── Message input ─────────── */}
         <div className="form-group">
           <label htmlFor="message">Message:</label>
           <input
@@ -428,7 +368,6 @@ function App() {
           />
         </div>
 
-        {/* ─────────── Chain selectors ─────────── */}
         <div className="select-row">
           <div className="form-group">
             <label htmlFor="sourceChain">Source Chain:</label>
@@ -460,7 +399,6 @@ function App() {
           </div>
         </div>
 
-        {/* ─────────── Send button ─────────── */}
         <button
           onClick={sendMessage}
           className="send-btn"
@@ -469,14 +407,12 @@ function App() {
           Send Message
         </button>
 
-        {/* ─────────── Status box ─────────── */}
         {status && (
           <div className="status">
             Status: <strong>{status}</strong>
           </div>
         )}
 
-        {/* ─────────── Tx / IDs / Received msg ─────────── */}
         {srcTxHash && (
           <div className="status">
             Source Tx:&nbsp;
@@ -516,7 +452,6 @@ function App() {
           </div>
         )}
 
-        {/* ─────────── User ID box ─────────── */}
         <div className="user-id-box">
           Your User ID:{" "}
           <span className="user-id-address">
@@ -524,7 +459,6 @@ function App() {
           </span>
         </div>
 
-        {/* ─────────── History ─────────── */}
         {history.length > 0 && (
           <div className="history" ref={chatHistoryRef}>
             {history.map((h) => (

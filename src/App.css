@@ -188,7 +188,6 @@ option {
   padding: 0.7rem 1.2rem;
 }
 
-/* ───────── Modal ───────── */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -210,7 +209,6 @@ option {
   text-align: center;
 }
 
-/* ───────── History item ───────── */
 .history-item {
   margin-bottom: 1rem;
   padding: 1rem;
@@ -224,7 +222,6 @@ option {
   transform: scale(1.01);
 }
 
-/* ── Custom classes to replace previous Tailwind utilities ────────────────── */
 .app-wrapper {
   min-height: 100vh;
   display: flex;
@@ -244,7 +241,6 @@ option {
   -webkit-text-fill-color: transparent;
 }
 
-/* Secondary heading (history title) */
 .heading-secondary {
   font-size: 2rem;
   font-weight: 700;
@@ -253,11 +249,9 @@ option {
   color: #a3a8f0;
 }
 
-/* Buttons */
 .connect-btn,
 .send-btn {
   width: 100%;
-  /* margin-bottom: 1rem; */
 }
 .connect-btn {
   background: linear-gradient(90deg, #2563eb 0%, #06b6d4 100%);
@@ -271,7 +265,6 @@ option {
   margin-left: 0.5rem;
 }
 
-/* Layout for the two dropdowns */
 .select-row {
   display: flex;
   gap: 1.5rem;
@@ -288,7 +281,6 @@ option {
   }
 }
 
-/* Modal */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -309,7 +301,6 @@ option {
   box-shadow: 0 6px 32px rgba(20, 20, 40, 0.32);
 }
 
-/* Transaction links */
 .tx-link {
   color: #38bdf8;
   text-decoration: underline;
@@ -319,14 +310,12 @@ option {
   color: #818cf8;
 }
 
-/* Info text */
 .tx-info {
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
   word-break: break-all;
 }
 
-/* Received message highlight */
 .received-msg {
   font-size: 1.125rem;
   color: #10b981;
@@ -334,12 +323,10 @@ option {
   margin-top: 1rem;
 }
 
-/* History wrapper spacing */
 .history-wrapper {
   margin-top: 2rem;
 }
 
-/* Message card */
 .message-card {
   margin-bottom: 1rem;
   padding: 1rem;
@@ -364,7 +351,6 @@ option {
   word-break: break-all;
 }
 
-/* ── Card container for all content ── */
 .card {
   background: #232946;
   border-radius: 32px;
@@ -387,7 +373,6 @@ option {
   }
 }
 
-/* Make form elements fill card width and add spacing */
 .card .form-group,
 .card .select-row,
 .card .status,
