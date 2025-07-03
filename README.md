@@ -11,7 +11,10 @@ A simple frontend DApp that allows users to send messages from one blockchain to
 - **View real-time status updates** on message delivery
 - **See transaction hashes** for both source and destination chains
 - **Message history/logs** with timestamps
-
+- **Simulation Mode** If MetaMask is not installed or the wallet is not connected:
+The app enters Simulation Mode
+Messages will appear to send, showing mock transaction hashes and status
+- Note: Simulation does not involve real chain communication or actual testnet tokens.
 ---
 
 ## 🚀 Getting Started
