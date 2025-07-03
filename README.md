@@ -1,6 +1,6 @@
 # Cross-Chain Messaging DApp
 
-A simple frontend DApp that allows users to send messages from one blockchain to another using the Hyperlane cross-chain messaging protocol. Supports major testnets including Ethereum Sepolia, Optimism Goerli, Arbitrum Sepolia, Base Sepolia, and Polygon Mumbai.
+A simple frontend DApp that allows users to send messages from one blockchain to another using the Hyperlane cross-chain messaging protocol.
 
 ---
 
