@@ -21,6 +21,8 @@ A simple frontend DApp that allows users to send messages from one blockchain to
 - [Node.js](https://nodejs.org/) (v18+ recommended)
 - [MetaMask](https://metamask.io/) browser extension
 - Testnet ETH on the source chain (get from a faucet)
+- Try this : - https://cloud.google.com/application/web3/faucet/ethereum/sepolia
+
 
 ### Installation
 
