@@ -11,7 +11,10 @@ A simple frontend DApp that allows users to send messages from one blockchain to
 - **View real-time status updates** on message delivery
 - **See transaction hashes** for both source and destination chains
 - **Message history/logs** with timestamps
-
+- **Simulation Mode** If MetaMask is not installed or the wallet is not connected:
+The app enters Simulation Mode
+Messages will appear to send, showing mock transaction hashes and status
+- Note: Simulation does not involve real chain communication or actual testnet tokens.
 ---
 
 ## 🚀 Getting Started
@@ -21,6 +24,8 @@ A simple frontend DApp that allows users to send messages from one blockchain to
 - [Node.js](https://nodejs.org/) (v18+ recommended)
 - [MetaMask](https://metamask.io/) browser extension
 - Testnet ETH on the source chain (get from a faucet)
+- Try this : - https://cloud.google.com/application/web3/faucet/ethereum/sepolia
+
 
 ### Installation
 
@@ -43,15 +48,12 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 ## ⚙️ Configuration
 
 All contract addresses and RPC URLs are hardcoded in `src/App.jsx`.  
-**If you deploy your own Receiver contracts, update the `receiver` field for each chain in the `CHAINS` array.**
 
 **Supported Chains:**
 
 - Ethereum Sepolia
-- Optimism Goerli
 - Arbitrum Sepolia
 - Base Sepolia
-- Polygon Mumbai
 
 ---
 
@@ -77,16 +79,4 @@ All contract addresses and RPC URLs are hardcoded in `src/App.jsx`.
 ## 📄 Notes
 
 - You must have testnet ETH on the source chain to send messages.
-- The destination chain must have a deployed Receiver contract to process and display messages.
-- All cross-chain messaging is for testnet/demo purposes only.
-
 ---
-
-## 📬 License
-
-MIT
-
----
-
-**Questions?**  
-Open an issue or contact the author.
