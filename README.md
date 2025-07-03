@@ -43,15 +43,12 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 ## ⚙️ Configuration
 
 All contract addresses and RPC URLs are hardcoded in `src/App.jsx`.  
-**If you deploy your own Receiver contracts, update the `receiver` field for each chain in the `CHAINS` array.**
 
 **Supported Chains:**
 
 - Ethereum Sepolia
-- Optimism Goerli
 - Arbitrum Sepolia
 - Base Sepolia
-- Polygon Mumbai
 
 ---
 
@@ -77,16 +74,4 @@ All contract addresses and RPC URLs are hardcoded in `src/App.jsx`.
 ## 📄 Notes
 
 - You must have testnet ETH on the source chain to send messages.
-- The destination chain must have a deployed Receiver contract to process and display messages.
-- All cross-chain messaging is for testnet/demo purposes only.
-
 ---
-
-## 📬 License
-
-MIT
-
----
-
-**Questions?**  
-Open an issue or contact the author.
