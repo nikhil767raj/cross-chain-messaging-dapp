@@ -1,0 +1,21 @@
+{
+  "name": "hardhat-deploy",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.9",
+    "@nomicfoundation/hardhat-ethers": "^3.0.9",
+    "@nomicfoundation/hardhat-ignition": "^0.15.12",
+    "@nomicfoundation/hardhat-toolbox": "^6.0.0",
+    "@nomicfoundation/ignition-core": "^0.15.12",
+    "dotenv": "^17.0.1",
+    "hardhat": "^2.25.0"
+  }
+}

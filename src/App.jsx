@@ -366,9 +366,9 @@ function App() {
           srcChainObj.domain,
           dstChainObj.domain
         );
-        // const fromBlock = receipt.blockNumber + 1;
-        // const events = await dstMailbox.queryFilter(filter, 0, "latest");
+
         const events = await dstMailbox.queryFilter(filter, 0, "latest");
+
         const event = events.find(
           (e) =>
             e.args &&
@@ -416,7 +416,6 @@ function App() {
       const errorMessage =
         err.reason || err.message || "An unknown error occurred.";
       setStatus(`Error: ${errorMessage}`);
-      // showMessageModal(`Error sending or receiving message: ${errorMessage}`);
       console.error("Error in sendMessage:", err);
     }
   };

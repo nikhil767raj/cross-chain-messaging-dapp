@@ -1,1 +1,38 @@
-node_modules
+# Node modules
+node_modules/
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# Hardhat build artifacts
+artifacts/
+cache/
+typechain/
+coverage/
+coverage.json
+
+# Hardhat/Foundry/Forge output
+out/
+forge-artifacts/
+
+# Environment variables and secrets
+.env
+.env.*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# VSCode and JetBrains IDEs
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Docker
+docker-compose.override.yml
+
+# Misc
+dist/
+build/
