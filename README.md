@@ -21,7 +21,7 @@ Messages will appear to send, showing mock transaction hashes and status
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (v18+ recommended)
+- [Node.js](https://nodejs.org/) (v20+ recommended)
 - [MetaMask](https://metamask.io/) browser extension
 - Testnet ETH on the source chain (get from a faucet)
 - Try this : - https://cloud.google.com/application/web3/faucet/ethereum/sepolia
