@@ -1,10 +1,16 @@
 import React, { useState, useRef } from "react";
 import { CHAINS } from "../constants/chains";
-import {EXPLORERS} from "../constants/explorer";
-import {RPC_URLS} from "../constants/rpc"
+import { EXPLORERS } from "../constants/explorer";
+import { RPC_URLS } from "../constants/rpc";
 import { generateRandomHex } from "../utils/generateRandomHex";
 import HistoryList from "../components/HistoryList";
-
+import Modal from "../components/Modal";
+import WalletConnectButton from "../components/WalletConnectButton";
+import MessageInput from "../components/MessageInput";
+import ChainSelector from "../components/ChainSelector";
+import SendButton from "../components/SendButton";
+import StatusInfo from "../components/StatusInfo";
+import UserIdBox from "../components/UserIdBox";
 
 function App() {
   const [walletAddress, setWalletAddress] = useState("");
@@ -63,7 +69,6 @@ function App() {
       );
     }
   };
-
 
   const sendMessage = async () => {
     setStatus("Please click Confirm in your wallet to send the message.");
@@ -209,7 +214,7 @@ function App() {
         const simulatedSrcTxHash = generateRandomHex(64);
         const simulatedMessageId = generateRandomHex(64);
         const simulatedDstTxHash = generateRandomHex(64);
-        
+
         setSrcTxHash(simulatedSrcTxHash);
         setMessageId(simulatedMessageId);
         setStatus("Simulated message sent! Waiting for simulated delivery...");
@@ -367,8 +372,8 @@ function App() {
         const event = events.find(
           (e) =>
             e.args &&
-            e.args.recipient.toLowerCase() === recipientAddress.toLowerCase() && 
-            window.ethers.utils.toUtf8String(e.args.message) === message 
+            e.args.recipient.toLowerCase() === recipientAddress.toLowerCase() &&
+            window.ethers.utils.toUtf8String(e.args.message) === message
         );
 
         if (event) {
@@ -417,122 +422,54 @@ function App() {
   };
   return (
     <div className="app-wrapper">
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <p>{modalContent}</p>
-            <button onClick={closeModal}>Got It!</button>
-          </div>
-        </div>
-      )}
+      <Modal show={showModal} content={modalContent} onClose={closeModal} />
       <div className="card">
         <h1 className="heading">Cross-Chain Messenger</h1>
 
-        <button onClick={connectWallet} className="connect-btn">
-          {walletAddress
-            ? `Connected: ${walletAddress.slice(0, 6)}…${walletAddress.slice(
-              -4
-            )}`
-            : "Connect Wallet"}
-        </button>
+        <WalletConnectButton
+          walletAddress={walletAddress}
+          onConnect={connectWallet}
+        />
 
-        <div className="form-group">
-          <label htmlFor="message">Message:</label>
-          <input
-            id="message"
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Enter your message"
+        <MessageInput
+          message={message}
+          onChange={(e) => setMessage(e.target.value)}
+        />
+
+        <div className="select-row">
+          <ChainSelector
+            label="Source Chain:"
+            value={sourceChain}
+            onChange={(e) => setSourceChain(Number(e.target.value))}
+            chains={CHAINS}
+            id="sourceChain"
+          />
+          <ChainSelector
+            label="Destination Chain:"
+            value={destChain}
+            onChange={(e) => setDestChain(Number(e.target.value))}
+            chains={CHAINS}
+            id="destChain"
           />
         </div>
 
-        <div className="select-row">
-          <div className="form-group">
-            <label htmlFor="sourceChain">Source Chain:</label>
-            <select
-              id="sourceChain"
-              value={sourceChain}
-              onChange={(e) => setSourceChain(Number(e.target.value))}
-            >
-              {CHAINS.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="form-group">
-            <label htmlFor="destChain">Destination Chain:</label>
-            <select
-              id="destChain"
-              value={destChain}
-              onChange={(e) => setDestChain(Number(e.target.value))}
-            >
-              {CHAINS.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+        <SendButton onClick={sendMessage} disabled={false} />
 
-        <button onClick={sendMessage} className="send-btn" disabled={false}>
-          Send Message
-        </button>
+        <StatusInfo
+          status={status}
+          srcTxHash={srcTxHash}
+          srcTxUrl={
+            srcTxHash ? `${EXPLORERS[sourceChain]}${srcTxHash}` : undefined
+          }
+          messageId={messageId}
+          dstTxHash={dstTxHash}
+          dstTxUrl={
+            dstTxHash ? `${EXPLORERS[destChain]}${dstTxHash}` : undefined
+          }
+          receivedMsg={receivedMsg}
+        />
 
-        {status && (
-          <div className="status">
-            Status: <strong>{status}</strong>
-          </div>
-        )}
-
-        {srcTxHash && (
-          <div className="status">
-            Source Tx:&nbsp;
-            <a
-              href={`${EXPLORERS[sourceChain]}${srcTxHash}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="tx-link"
-            >
-              {srcTxHash}
-            </a>
-          </div>
-        )}
-        {messageId && (
-          <div className="status">
-            Message ID:&nbsp;<code>{messageId}</code>
-          </div>
-        )}
-
-        {dstTxHash && (
-          <div className="status">
-            Destination Tx:&nbsp;
-            <a
-              href={`${EXPLORERS[destChain]}${dstTxHash}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="tx-link"
-            >
-              {dstTxHash}
-            </a>
-          </div>
-        )}
-
-        {receivedMsg && (
-          <div className="status">
-            <strong>Received&nbsp;Message:</strong>&nbsp;{receivedMsg}
-          </div>
-        )}
-
-        <div className="user-id-box">
-          Your User ID:{" "}
-          <span className="user-id-address">
-            {walletAddress || "Connect wallet to see ID"}
-          </span>
-        </div>
+        <UserIdBox walletAddress={walletAddress} />
 
         <HistoryList history={history} />
       </div>
