@@ -6,7 +6,7 @@ A simple frontend DApp that allows users to send messages from one blockchain to
 
 ## ✨ Features
 
-- **Send messages** from one testnet to another
+- **Send messages** from one testnet to another ( here across same chain )
 - **Select source and destination chains**
 - **View real-time status updates** on message delivery
 - **See transaction hashes** for both source and destination chains
