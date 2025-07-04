@@ -4,16 +4,19 @@ npm-debug.log
 yarn-error.log
 pnpm-debug.log
 
-# Hardhat build artifacts
+# Build output
 artifacts/
 cache/
-typechain/
+dist/
+build/
+out/
+
+# Typechain
+/typechain/
+
+# Coverage
 coverage/
 coverage.json
-
-# Hardhat/Foundry/Forge output
-out/
-forge-artifacts/
 
 # Environment variables and secrets
 .env
@@ -23,9 +26,15 @@ forge-artifacts/
 .DS_Store
 Thumbs.db
 
-# VSCode and JetBrains IDEs
+# IDEs
 .vscode/
 .idea/
+
+# Hardhat deploy build and secrets
+hardhat-deploy/node_modules/
+hardhat-deploy/artifacts/
+hardhat-deploy/cache/
+hardhat-deploy/.env
 
 # Logs
 *.log
@@ -34,5 +43,4 @@ Thumbs.db
 docker-compose.override.yml
 
 # Misc
-dist/
 build/
